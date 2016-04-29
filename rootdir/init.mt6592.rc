@@ -14,7 +14,7 @@ on init
     export LD_PRELOAD "libxlog.so"
 
     # By default, primary storage is physical
-    setprop ro.vold.primary_physical 1
+    # setprop ro.vold.primary_physical 1
 
     symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0
@@ -54,6 +54,19 @@ on init
     chmod 660 /dev/ttyGS0 
     chown system /dev/ttyGS1
     chmod 660 /dev/ttyGS1
+	
+#	Define TCP buffer sizes for various networks
+#   ReadMin, ReadInitial, ReadMax, WriteMin, WriteInitial, WriteMax,
+    setprop net.tcp.buffersize.default 4096,87380,524288,4096,16384,524288
+    setprop net.tcp.buffersize.wifi    524288,1048576,2097152,262144,524288,1048576
+    setprop net.tcp.buffersize.lte     524288,1048576,2560000,262144,524288,1048576
+    setprop net.tcp.buffersize.umts    4094,87380,524288,4096,16384,524288
+    setprop net.tcp.buffersize.hspa    4094,87380,524288,4096,16384,524288
+    setprop net.tcp.buffersize.hsupa   4094,87380,524288,4096,16384,524288
+    setprop net.tcp.buffersize.hsdpa   4094,87380,524288,4096,16384,524288
+    setprop net.tcp.buffersize.hspap   4094,87380,1220608,4096,16384,1220608
+    setprop net.tcp.buffersize.edge    4093,26280,35040,4096,16384,35040
+    setprop net.tcp.buffersize.gprs    4092,8760,11680,4096,8760,11680
 
     chown bluetooth bluetooth /dev/hid-keyboard
     chmod 0660 /dev/hid-keyboard
@@ -104,10 +117,12 @@ on init
     chmod 0660 /dev/kd_camera_flashlight
     chmod 0660 /dev/kd_camera_hw_bus2
     chmod 0660 /dev/FM50AF
+    chmod 0660 /dev/BU6424AF
     chmod 0660 /dev/DW9714AF
     chmod 0660 /dev/DW9718AF
     chmod 0660 /dev/OV8825AF
     chmod 0660 /dev/CAM_CAL_DRV
+	chmod 0660 /dev/EEPROM_M24C08F
 
     chown system camera /dev/camera-sysram
     chown system camera /dev/camera-isp
@@ -116,10 +131,12 @@ on init
     chown system camera /dev/kd_camera_flashlight
     chown system camera /dev/kd_camera_hw_bus2
     chown system camera /dev/FM50AF
+    chown system camera /dev/BU6424AF
     chown system camera /dev/DW9714AF
     chown system camera /dev/DW9718AF
     chown system camera /dev/OV8825AF
     chown system camera /dev/CAM_CAL_DRV
+	chown system camera /dev/EEPROM_M24C08F
 
     chown system system /dev/RT_Monitor
     chmod 0600 /dev/RT_Monitor
@@ -133,6 +150,14 @@ on init
     chmod 0660 /dev/mtk_sched
     chown system media /dev/ebc
     chmod 0660 /dev/ebc
+	
+	#sensorhub
+    chmod 0660 /dev/shf
+    chown system system /dev/shf
+	
+	#rgb blink
+    chmod 0660 /dev/rgb_blink
+    chown system system /dev/rgb_blink
 
     # Sensor
     chmod 0666 /dev/hwmsensor
@@ -237,7 +262,7 @@ on init
     # TV-out
     chmod 0664 /dev/TV-out
 
-    # HDMI
+    #H DMI
     chown meida system /dev/hdmitx
     chmod 0664 /dev/hdmitx
 
@@ -248,9 +273,14 @@ on init
 on post-fs-data
     # Create the directories used by the Wireless subsystem
     mkdir /data/misc/wifi 0770 wifi wifi
-    mkdir /data/misc/wifi/sockets 0770 wifi wifi
+    chmod 0660 /data/misc/wifi/wpa_supplicant.conf
+	chmod 0660 /data/misc/wifi/p2p_supplicant.conf
+    
+	mkdir /data/misc/wifi/sockets 0770 wifi wifi
     mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
-    mkdir /data/misc/dhcp 0770 dhcp dhcp
+	
+	# dhcp server
+	mkdir /data/misc/dhcp 0770 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
 
     # Bluetooth
@@ -485,6 +515,13 @@ service memsicd3416x /system/bin/memsicd3416x
 	 user system
     group system
     class main
+
+service memsicd3416xfhd /system/bin/memsicd3416xfhd
+     disabled
+	 user system
+    group system
+    class main
+    oneshot
 
 service akmd8975 /system/bin/akmd8975
     disabled
