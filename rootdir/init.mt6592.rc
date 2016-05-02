@@ -158,6 +158,10 @@ on init
     #rgb blink
     chmod 0660 /dev/rgb_blink
     chown system system /dev/rgb_blink
+    
+    #hwdctl
+    chmod 0660 /dev/hwdctl
+    chown system system /dev/hwdctl
 
     # Sensor
     chmod 0666 /dev/hwmsensor
