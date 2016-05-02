@@ -1,5 +1,5 @@
 #
-# system.prop for bq Aquaris E5 FHD
+# system.prop for bq Aquaris E6
 #
 
 rild.libpath=/system/lib/mtk-ril.so
