@@ -1,6 +1,6 @@
 # W.I.P
 
-Trying to adapt kingzone k1 turbo specs to Aquaris E5 FHD (similar MT6592 device) in order to build CM13 from source
+Trying to adapt kingzone k1 turbo specs to Aquaris E6 (similar MT6592 device) in order to build CM13 from source
 
 # Build
 
